@@ -1,0 +1,231 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+// MATHEUS EXPEDITO PERDIZ VICTOR
+// 7520011
+
+namespace Exercicio
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label6_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label7_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void nomeTextBox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void enderecoTextBox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void telfixoTextBox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void telcelularTextBox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void emailTextBox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void salarioatualTextBox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void datanascimentoTextBox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void LimparTela()
+
+        {
+            nomeTextBox.Clear();
+            enderecoTextBox.Clear();
+            telfixoTextBox.Clear();
+            telcelularTextBox.Clear();
+            emailTextBox.Clear();
+            salarioatualTextBox.Clear();
+            datanascimentoTextBox.Clear();
+            nomeTextBox.Focus();
+
+        }
+
+        private string CaixaVazia(TextBox txt)
+
+	{		
+
+	    if (txt.Text.Trim() == "") 
+            {
+                txt.Focus();
+		txt.SelectAll();
+		throw new Exception("A informação é obrigatória.")
+            }
+
+	    return txt.Text;
+
+        } 
+
+
+        private int ValorNumerico(TextBox salarioatualTextBox)
+        {
+
+            try
+            {
+                return Convert.ToInt32(salarioatualTextBox.Text);
+            }
+
+            catch
+            {
+                salarioatualTextBox.Focus();
+                salarioatualTextBox.SelectAll();
+                throw new Exception("O salário atual deve ser numérico.");
+            }
+
+        }
+
+        private DateTime DataValida(TextBox datanascimentoTextBox)
+        {
+
+            try
+            {
+
+                return Convert.ToDateTime(datanascimentoTextBox.Text);
+
+            }
+
+            catch
+            {
+
+                datanascimentoTextBox.Focus();
+                datanascimentoTextBox.SelectAll();
+                throw new Exception("A data de nascimento deve ser válida.");
+
+            }
+
+        }
+
+        private void gravarButton_Click(object sender, EventArgs e)
+        {	
+
+	try
+            {
+                string nome = CaixaVazia(nomeTextBox);
+                string endereco = CaixaVazia(nomeTextBox);
+                string telfixo = CaixaVazia(telfixoTextBox);
+                string telcelular = CaixaVazia(telcelularTextBox);
+                string salarioatual = CaixaVazia(salarioatualTextBox);
+                string datanascimento = CaixaVazia(datanascimentoTextBox);
+                string email = CaixaVazia(emailTextBox);
+		DateTime datanascimento = DataValida(datanascimentoTextBox);
+                int salarioatual = ValorNumerico(salarioatualTextBox);
+                int imposto = 0;
+
+                salarioatual = Convert.ToInt32(salarioatualTextBox.Text);
+
+                if (salarioatual <= 3000)
+                {
+                    imposto = 0;
+                }
+
+                if (salarioatual > 3000 && salarioatual <= 5000)
+                {
+                    imposto = salarioatual * 10 / 100;
+                }
+
+                if (salarioatual > 5000 && salarioatual <= 10000)
+                {
+                    imposto = salarioatual * 15 / 100;
+                }
+
+                if (salarioatual > 10000)
+
+                {
+                    imposto = salarioatual * 20 / 100;
+                }
+            
+                string caminho = @"C:\Windows\Temp\Funcionarios.csv";
+
+                string registro = string.Format("{0};{1};{2};{3};{4};{5};{6};{7}",
+                    nomeTextBox.Text.ToUpper(), enderecoTextBox.Text.ToUpper(),
+                    telfixoTextBox.Text, telcelularTextBox.Text, emailTextBox.Text,
+                    salarioatualTextBox.Text, datanascimentoTextBox.Text, imposto);
+
+                if (!File.Exists(caminho))
+                {
+                    StreamWriter sw1 = new StreamWriter(caminho, true);
+                    sw1.WriteLine("Nome;Endereço;Telefone Fixo;Telefone Celular;E-mail;Salário Atual;Data de Nascimento;Imposto");
+                    sw1.Close();
+                }
+
+                StreamWriter sw = new StreamWriter(caminho, true);
+                sw.WriteLine(registro);
+                sw.Close();
+                MessageBox.Show("Cliente cadastrado com sucesso", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                LimparTela();
+
+            }
+
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.Message);
+
+            }            
+        }
+    }
+}
